@@ -129,5 +129,6 @@ tmp/
 temp/
 
 test-client/node_modules
+messages.sqlite
 
 # End of https://www.toptal.com/developers/gitignore/api/node

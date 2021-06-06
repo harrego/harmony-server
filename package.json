@@ -2,14 +2,22 @@
   "name": "harmony-server",
   "version": "1.0.0",
   "description": "Reference server implementation for Harmony",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
+    "build": "babel src -d dist && node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "sqlite3": "^5.0.2",
+    "uuid": "^8.3.2",
     "ws": "^7.4.6"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.14.3",
+    "@babel/core": "^7.14.3",
+    "@babel/preset-env": "^7.14.4"
   }
 }
