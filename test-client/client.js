@@ -2,6 +2,7 @@ const WebSocket = require('ws');
 const ws = new WebSocket('ws://127.0.0.1:6969/');
 
 // Ugly testing code
+console.log("connecting to client")
 ws.on('open', function () {
   ws.send(JSON.stringify({
     'op': 'Connect',
@@ -18,6 +19,7 @@ ws.on('open', function () {
   //   }
   // }))
 
+  console.log("sending a message")
   ws.send(JSON.stringify({
     'op': 'MessageCreate',
     'data': {
@@ -57,6 +59,7 @@ ws.on('open', function () {
 });
 
 ws.on('message', function incoming(data) {
+  console.log("message recv")
   console.log(data);
 });
 

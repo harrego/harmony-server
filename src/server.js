@@ -50,12 +50,21 @@ async function handleMessage(ws, message) {
     //channels.find(c => c.id === body.data.message.channelId).messages.push(msg);
     const rawMessage = {
       ...msg,
-      messageId: 'whatever'
+      messageId: 'whatever' + Math.random().toString(36).substring(4) /* avoiding non unique errors */
     };
 
-    dbHelper.insertMessages(db, rawMessage);
+    await dbHelper.insertMessages(db, rawMessage);
 
-    await dbHelper.queryMessages(db);
+	let messages;
+	try {
+		messages = await dbHelper.queryMessages(db);
+	} catch (err) {
+		console.log("error: couldnt query msgs");
+		console.log(err);
+		return;
+	}
+	
+    console.log(messages);
     //console.log(chan.messages);
 
     // Notify all connected clients
@@ -88,8 +97,11 @@ console.log('Serving WebSocket connections on :6969');
 const wss = new WebSocket.Server({ port: 6969 });
 
 // Create the database(s) if they dont exist
-console.log('Creating the databases if they don\'t exist..');
-dbHelper.createDb(db);
+(async () => {
+  console.log('Creating the databases if they don\'t exist..');
+  await dbHelper.createDb(db);
+  console.log('Configured databases')
+})();
 
 wss.on('connection', (ws, req) => {
   console.log(`Connection from ${req.socket.remoteAddress}`);
