@@ -1,19 +1,27 @@
 const express = require('express');
-const ws = require('ws');
+const WebSocket = require('ws');
 
-const app = express();
+// TODO: Move this to a permanent storage eg database
+let clients = [];
+
+function handleMessage(message) {
+    console.log(message);
+}
 
 // Setup our websocket server
-const wss = new ws.Server({ noServer: true });
-wss.on('connection', socket => {
-    // TODO: handle the message
-    wss.on('message', message => console.log(message));
-});
+const wss = new WebSocket.Server({ port: 6969 });
+wss.on('connection', function connect (ws, req) {
+    console.log(`Connection from ${req.socket.remoteAddress}`);
 
-// Pipe it through express
-const server = app.listen(3000);
-server.on('upgrade', (request, socket, head) => {
-    wss.handleUpgrade(request, socket, head, socket => {
-        wss.emit('connection', socket, request);
+    // TODO: handle the message
+    ws.on('message', function incoming(message) {
+        console.log(message);
     });
+
+    // Send reply
+    ws.send(JSON.stringify({
+        'op': 'WsReply',
+        'success': 'true',
+        'error': ''
+    }));
 });
